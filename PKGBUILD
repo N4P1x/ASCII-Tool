@@ -1,6 +1,6 @@
 # Maintainer: you <you@example.com>
 pkgname=ascii-tool
-pkgver=1.2
+pkgver=1.3
 pkgrel=1
 pkgdesc="Local browser-based image, ANSI, and video to ASCII converter"
 arch=('any')

@@ -7,9 +7,7 @@
 A self-contained, browser-based tool that converts images, ANSI color, and video
 into ASCII art. Everything runs locally — no uploads, no sign-up, no tracking.
 
-Reverse-engineered from [asciitool.com](https://asciitool.com) using
-[REA](https://github.com/morluto/rea) and reimplemented as a single HTML file
-that works offline.
+A single HTML file that works offline. No dependencies, no build step.
 
 **[Live demo →](https://n4p1x.github.io/ASCII-Tool/)**
 
