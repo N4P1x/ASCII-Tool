@@ -3,50 +3,55 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ASCII Tool — Local</title>
+    <title>ASCII Tool</title>
     <style>
       :root {
         --bg: #f5f5f0;
         --fg: #181818;
         --card: #ffffff;
-        --border: #e5e5e5;
-        --muted: #6b6b6b;
-        --muted2: #a1a1a1;
-        --accent: #171717;
+        --border: #d9d9d9;
+        --muted: #595959;
+        --muted2: #8a8a8a;
+        --accent: #181818;
         --accent-fg: #f5f5f0;
-        --input: #e5e5e5;
+        --input: #e8e8e8;
         --ring: #a1a1a1;
+        --term-bg: #ffffff;
+        --term-fg: #181818;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #181818;
-          --fg: #f5f5f0;
-          --card: #171717;
-          --border: #ffffff1a;
-          --muted: #a1a1a1;
-          --muted2: #6b6b6b;
-          --accent: #e5e5e5;
-          --accent-fg: #171717;
-          --input: #ffffff26;
-          --ring: #737373;
+          --bg: #141414;
+          --fg: #f0f0f0;
+          --card: #1c1c1c;
+          --border: #2e2e2e;
+          --muted: #a0a0a0;
+          --muted2: #666;
+          --accent: #f0f0f0;
+          --accent-fg: #141414;
+          --input: #2a2a2a;
+          --ring: #555;
+          --term-bg: #0a0a0a;
+          --term-fg: #f0f0f0;
         }
       }
       * {
         box-sizing: border-box;
-      }
-      html,
-      body {
         margin: 0;
         padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
       }
       body {
         background: var(--bg);
         color: var(--fg);
         font-family:
+          "Inter",
           ui-sans-serif,
           system-ui,
           -apple-system,
-          Segoe UI,
+          "Segoe UI",
           Roboto,
           Helvetica,
           Arial,
@@ -54,11 +59,13 @@
         font-size: 14px;
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
       .wrap {
-        max-width: 1120px;
+        max-width: 1180px;
         margin: 0 auto;
-        padding: 0 20px 40px;
+        padding: 0 24px 48px;
       }
       a {
         color: inherit;
@@ -68,18 +75,24 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 0;
+        padding: 18px 0;
         border-bottom: 1px solid var(--border);
-        margin-bottom: 24px;
+        margin-bottom: 28px;
       }
       .logo {
         font-weight: 600;
         font-size: 15px;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.02em;
+      }
+      .logo small {
+        color: var(--muted);
+        font-weight: 400;
+        margin-left: 6px;
+        font-size: 12px;
       }
       .navlinks {
         display: flex;
-        gap: 18px;
+        gap: 20px;
         font-size: 13px;
         color: var(--muted);
       }
@@ -87,34 +100,35 @@
         color: var(--fg);
       }
       h1 {
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 600;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.02em;
         margin: 0 0 6px;
       }
       .sub {
         color: var(--muted);
         font-size: 13px;
-        margin: 0 0 18px;
-        max-width: 640px;
+        margin: 0 0 20px;
+        max-width: 680px;
+        line-height: 1.55;
       }
       .tabs {
-        display: flex;
-        gap: 0;
+        display: inline-flex;
         border: 1px solid var(--border);
-        border-radius: 0;
-        width: fit-content;
-        margin: 0 0 20px;
+        margin: 0 0 22px;
         overflow: hidden;
       }
       .tab {
-        padding: 8px 16px;
+        padding: 8px 18px;
         font-size: 13px;
         color: var(--muted);
         cursor: pointer;
         background: var(--card);
         border-right: 1px solid var(--border);
-        transition: background 0.1s;
+        transition:
+          background 0.12s,
+          color 0.12s;
+        user-select: none;
       }
       .tab:last-child {
         border-right: none;
@@ -129,10 +143,11 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: 360px 1fr;
-        gap: 20px;
+        grid-template-columns: 370px 1fr;
+        gap: 22px;
+        align-items: start;
       }
-      @media (max-width: 860px) {
+      @media (max-width: 900px) {
         .grid {
           grid-template-columns: 1fr;
         }
@@ -140,35 +155,44 @@
       .panel {
         background: var(--card);
         border: 1px solid var(--border);
-        border-radius: 0;
-        padding: 16px;
+        padding: 18px;
+      }
+      .panel + .panel {
+        margin-top: 0;
       }
       .panel h2 {
-        font-size: 11px;
-        margin: 0 0 12px;
+        font-size: 10.5px;
+        margin: 0 0 14px;
         color: var(--muted);
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.12em;
         font-weight: 600;
       }
       .row {
         margin-bottom: 14px;
       }
+      .row:last-child {
+        margin-bottom: 0;
+      }
       .row label {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
         font-size: 12px;
         margin-bottom: 6px;
         color: var(--muted);
+        font-weight: 500;
       }
       .row label span.val {
         color: var(--fg);
         font-variant-numeric: tabular-nums;
+        font-weight: 600;
       }
       input[type="range"] {
         width: 100%;
         accent-color: var(--accent);
         height: 2px;
+        cursor: pointer;
       }
       input[type="text"],
       select,
@@ -177,10 +201,10 @@
         background: var(--bg);
         border: 1px solid var(--border);
         color: var(--fg);
-        border-radius: 0;
         padding: 8px 10px;
         font-size: 13px;
         outline: none;
+        transition: border-color 0.12s;
       }
       input[type="text"]:focus,
       select:focus,
@@ -189,22 +213,43 @@
       }
       textarea {
         font-family: ui-monospace, Menlo, Consolas, monospace;
-        min-height: 64px;
+        min-height: 60px;
         resize: vertical;
-        line-height: 1.4;
+        line-height: 1.45;
+      }
+      select {
+        cursor: pointer;
+        appearance: none;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+          linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+        background-position:
+          calc(100% - 14px) 50%,
+          calc(100% - 9px) 50%;
+        background-size:
+          5px 5px,
+          5px 5px;
+        background-repeat: no-repeat;
+        padding-right: 26px;
       }
       .btn {
         background: var(--accent);
         color: var(--accent-fg);
         border: 1px solid var(--accent);
-        border-radius: 0;
-        padding: 8px 14px;
+        padding: 8px 16px;
         font-weight: 500;
         cursor: pointer;
         font-size: 13px;
+        transition:
+          opacity 0.12s,
+          transform 0.05s;
+        display: inline-block;
       }
       .btn:hover {
-        opacity: 0.85;
+        opacity: 0.88;
+      }
+      .btn:active {
+        transform: translateY(1px);
       }
       .btn.secondary {
         background: var(--card);
@@ -213,6 +258,7 @@
       }
       .btn.secondary:hover {
         border-color: var(--fg);
+        opacity: 1;
       }
       .btn.ghost {
         background: transparent;
@@ -220,20 +266,22 @@
         border: 1px solid var(--border);
       }
       .btn.rowbtn {
-        display: inline-block;
         margin-right: 6px;
         margin-top: 8px;
       }
       .drop {
         border: 1px dashed var(--border);
-        border-radius: 0;
-        padding: 28px 16px;
+        padding: 26px 16px;
         text-align: center;
         color: var(--muted);
         cursor: pointer;
         background: var(--bg);
+        transition:
+          border-color 0.12s,
+          color 0.12s;
       }
-      .drop:hover {
+      .drop:hover,
+      .drop.drag {
         border-color: var(--fg);
         color: var(--fg);
       }
@@ -245,6 +293,7 @@
       }
       .drop .small {
         font-size: 12px;
+        color: var(--muted);
       }
       .srcbox {
         margin-top: 12px;
@@ -264,20 +313,20 @@
         margin-top: 8px;
       }
       .preview {
-        background: var(--bg);
+        background: var(--term-bg);
         border: 1px solid var(--border);
-        border-radius: 0;
-        padding: 14px;
-        min-height: 420px;
+        padding: 16px;
+        min-height: 460px;
         overflow: auto;
+        position: relative;
       }
       .out {
-        font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
         font-size: 11px;
         line-height: 1;
         white-space: pre;
         letter-spacing: 0;
-        color: var(--fg);
+        color: var(--term-fg);
       }
       .controls2 {
         display: grid;
@@ -296,32 +345,38 @@
         font-size: 12px;
         color: var(--muted);
         cursor: pointer;
+        user-select: none;
       }
       .toggle input {
         accent-color: var(--accent);
         width: 14px;
         height: 14px;
+        cursor: pointer;
       }
       .colorpair {
         display: flex;
-        align-items: center;
-        gap: 10px;
+        align-items: flex-end;
+        gap: 12px;
         flex-wrap: wrap;
       }
+      .colorpair .cp {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .colorpair .cp label {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0;
+        font-weight: 500;
+      }
       .colorpair input[type="color"] {
-        width: 36px;
-        height: 26px;
+        width: 44px;
+        height: 28px;
         border: 1px solid var(--border);
         background: var(--bg);
-        border-radius: 0;
         cursor: pointer;
         padding: 2px;
-      }
-      .colorpair label {
-        font-size: 12px;
-        color: var(--muted);
-        display: block;
-        margin-bottom: 2px;
       }
       .vidcontrols {
         display: flex;
@@ -333,7 +388,7 @@
         border-top: 1px solid var(--border);
       }
       .vidcontrols .small {
-        margin: 0 6px;
+        margin: 0 4px;
         color: var(--muted);
         font-size: 12px;
       }
@@ -343,16 +398,52 @@
         margin-top: 12px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
       }
       .status .dot {
         width: 6px;
         height: 6px;
         background: var(--fg);
+        flex-shrink: 0;
+      }
+      .how {
+        margin-top: 36px;
+        border-top: 1px solid var(--border);
+        padding-top: 24px;
+      }
+      .how h2 {
+        font-size: 10.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        margin: 0 0 16px;
+      }
+      .how-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 24px;
+      }
+      @media (max-width: 720px) {
+        .how-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .how-item .n {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--fg);
+        margin-bottom: 4px;
+        font-variant-numeric: tabular-nums;
+      }
+      .how-item .t {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
       }
       footer {
-        margin-top: 32px;
-        padding-top: 16px;
+        margin-top: 40px;
+        padding-top: 18px;
         border-top: 1px solid var(--border);
         display: flex;
         justify-content: space-between;
@@ -365,14 +456,17 @@
         color: var(--fg);
       }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="wrap">
       <nav>
-        <div class="logo">
-          ASCII Tool
-          <span style="color: var(--muted); font-weight: 400">— local</span>
-        </div>
+        <div class="logo">ASCII Tool <small>local</small></div>
         <div class="navlinks">
           <a href="#tool">Tool</a>
           <a href="#how">How it works</a>
@@ -409,7 +503,7 @@
           </div>
           <div id="srcinfo" class="srcinfo"></div>
 
-          <h2 style="margin-top: 16px">Configuration</h2>
+          <h2 style="margin-top: 18px">Configuration</h2>
           <div class="row">
             <label>Width (chars) <span class="val" id="wv">100</span></label>
             <input id="width" type="range" min="20" max="768" value="100" />
@@ -479,19 +573,13 @@
               <label class="toggle"
                 ><input type="checkbox" id="invert" /> Invert</label
               >
-              <div>
-                <label for="fg">Text</label><br /><input
-                  type="color"
-                  id="fg"
-                  value="#ffffff"
-                />
+              <div class="cp">
+                <label for="fg">Text</label
+                ><input type="color" id="fg" value="#ffffff" />
               </div>
-              <div>
-                <label for="bg">Background</label><br /><input
-                  type="color"
-                  id="bg"
-                  value="#000000"
-                />
+              <div class="cp">
+                <label for="bg">Background</label
+                ><input type="color" id="bg" value="#000000" />
               </div>
             </div>
           </div>
@@ -503,8 +591,8 @@
           </div>
           <div class="row">
             <label class="toggle"
-              ><input type="checkbox" id="transparent" /> Transparent background (no
-              bg)</label
+              ><input type="checkbox" id="transparent" /> Transparent background
+              (no bg)</label
             >
           </div>
           <div class="row" style="display: flex; gap: 6px; flex-wrap: wrap">
@@ -543,79 +631,45 @@
         </div>
       </div>
 
-      <div
-        id="how"
-        style="
-          margin-top: 32px;
-          border-top: 1px solid var(--border);
-          padding-top: 24px;
-        "
-      >
-        <h2
-          style="
-            font-size: 11px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin: 0 0 16px;
-          "
-        >
-          How it works
-        </h2>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-          "
-        >
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              01 — Choose source media
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
+      <div id="how" class="how">
+        <h2>How it works</h2>
+        <div class="how-grid">
+          <div class="how-item">
+            <div class="n">01 — Choose source media</div>
+            <div class="t">
               Start with a browser-readable image, video, or animated GIF.
             </div>
           </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              02 — Local conversion
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
+          <div class="how-item">
+            <div class="n">02 — Local conversion</div>
+            <div class="t">
               Your source file is processed in your browser, not uploaded.
             </div>
           </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              03 — Fine tune output
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
+          <div class="how-item">
+            <div class="n">03 — Fine tune output</div>
+            <div class="t">
               Adjust width, aspect ratio, contrast, colors, and character ramps.
             </div>
           </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              04 — Preview result
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
+          <div class="how-item">
+            <div class="n">04 — Preview result</div>
+            <div class="t">
               Compare image output, inspect ANSI color, or preview video frames.
             </div>
           </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              05 — Copy or download
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
+          <div class="how-item">
+            <div class="n">05 — Copy or download</div>
+            <div class="t">
               Copy text output or export image, animation, and frame data
               formats.
             </div>
           </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
-              Private by design
-            </div>
-            <div style="font-size: 13px; color: var(--muted)">
-              No sign up. No upload. No tracking.
+          <div class="how-item">
+            <div class="n">Private by design</div>
+            <div class="t">
+              No sign up. No upload. No tracking. Everything runs on your
+              device.
             </div>
           </div>
         </div>
@@ -817,12 +871,14 @@
       });
       $("ramp").value = RAMPS.classic;
 
-      ["width", "aspect", "bright", "contrast", "edges", "scale"].forEach((id) => {
-        $(id).addEventListener("input", () => {
-          updateLabels();
-          convert();
-        });
-      });
+      ["width", "aspect", "bright", "contrast", "edges", "scale"].forEach(
+        (id) => {
+          $(id).addEventListener("input", () => {
+            updateLabels();
+            convert();
+          });
+        },
+      );
       function updateLabels() {
         $("wv").textContent = $("width").value;
         $("arv").textContent = parseFloat($("aspect").value).toFixed(2);
@@ -1005,7 +1061,9 @@
           out.textContent = res.text;
           out.style.color = $("fg").value;
         }
-        out.style.background = $("transparent").checked ? "transparent" : $("bg").value;
+        out.style.background = $("transparent").checked
+          ? "transparent"
+          : "var(--term-bg)";
         renderToCanvas(res, opts);
         $("statustext").textContent =
           "Output: " + res.cols + " × " + res.rows + " chars";
@@ -1041,9 +1099,7 @@
         const ctx = canvas.getContext("2d");
         const scale = parseInt($("scale").value) || 1;
         const fontSize = 10 * scale;
-        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
-        const lines = res.text.split("\n");
-        const charW = ctx.measureText("M").width || 6;
+        const charW = fontSize * 0.6;
         const lineH = fontSize * 1.05;
         canvas.width = Math.ceil(charW * res.cols) + 8;
         canvas.height = Math.ceil(lineH * res.rows) + 8;
@@ -1053,7 +1109,9 @@
           ctx.fillStyle = $("bg").value;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
+        ctx.font =
+          fontSize +
+          'px ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace';
         ctx.textBaseline = "top";
         if (opts.color) {
           const ansiLines = res.ansi.split("\n");
@@ -1069,10 +1127,51 @@
           });
         } else {
           ctx.fillStyle = $("fg").value;
-          lines.forEach((line, y) => {
+          res.text.split("\n").forEach((line, y) => {
             ctx.fillText(line, 4, y * lineH + 4);
           });
         }
+      }
+
+      function renderHighResCanvas(res, opts, targetW) {
+        const cols = res.cols,
+          rows = res.rows;
+        const charW = targetW / cols;
+        const fontSize = charW / 0.6;
+        const lineH = fontSize * 1.05;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = Math.ceil(charW * cols) + 8;
+        canvas.height = Math.ceil(lineH * rows) + 8;
+        if ($("transparent").checked) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = $("bg").value;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.font =
+          fontSize +
+          'px ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace';
+        ctx.textBaseline = "top";
+        if (opts.color) {
+          const ansiLines = res.ansi.split("\n");
+          ansiLines.forEach((line, y) => {
+            const re = /\x1b\[38;2;(\d+);(\d+);(\d+)m(.)\x1b\[0m/g;
+            let match,
+              cx = 4;
+            while ((match = re.exec(line)) !== null) {
+              ctx.fillStyle = `rgb(${match[1]},${match[2]},${match[3]})`;
+              ctx.fillText(match[4], cx, y * lineH + 4);
+              cx += charW;
+            }
+          });
+        } else {
+          ctx.fillStyle = $("fg").value;
+          res.text.split("\n").forEach((line, y) => {
+            ctx.fillText(line, 4, y * lineH + 4);
+          });
+        }
+        return canvas;
       }
 
       $("convert").addEventListener("click", convert);
@@ -1082,9 +1181,11 @@
         $("bright").value = 0;
         $("contrast").value = 0;
         $("edges").value = 0;
+        $("scale").value = 1;
         $("invert").checked = false;
         $("fg").value = "#ffffff";
         $("bg").value = "#000000";
+        $("transparent").checked = false;
         $("rampsel").value = "classic";
         $("ramp").value = RAMPS.classic;
         $("coloransi").checked = mode === "ansi";
@@ -1101,54 +1202,24 @@
         const out = $("out").textContent || $("out").innerText;
         downloadText(out, "ascii.txt");
       });
-      function renderHighResCanvas(res, opts, targetW) {
-        const cols = res.cols, rows = res.rows;
-        const charW = targetW / cols;
-        const fontSize = charW / 0.6;
-        const lineH = fontSize * 1.05;
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = Math.ceil(charW * cols) + 8;
-        canvas.height = Math.ceil(lineH * rows) + 8;
-        if ($("transparent").checked) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        } else {
-          ctx.fillStyle = $("bg").value;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
-        ctx.textBaseline = "top";
-        if (opts.color) {
-          const ansiLines = res.ansi.split("\n");
-          ansiLines.forEach((line, y) => {
-            const re = /\x1b\[38;2;(\d+);(\d+);(\d+)m(.)\x1b\[0m/g;
-            let match, cx = 4;
-            while ((match = re.exec(line)) !== null) {
-              ctx.fillStyle = `rgb(${match[1]},${match[2]},${match[3]})`;
-              ctx.fillText(match[4], cx, y * lineH + 4);
-              cx += charW;
-            }
-          });
-        } else {
-          ctx.fillStyle = $("fg").value;
-          res.text.split("\n").forEach((line, y) => {
-            ctx.fillText(line, 4, y * lineH + 4);
-          });
-        }
-        return canvas;
-      }
       $("downloadpng").addEventListener("click", () => {
         setStatus("Rendering PNG…");
         setTimeout(() => {
           const res = window.__lastResult;
-          if (!res) { setStatus("Nothing to export."); return; }
+          if (!res) {
+            setStatus("Nothing to export.");
+            return;
+          }
           const opts = getOpts();
           const mode = $("res").value;
           let targetW = $("outcanvas").width;
           if (mode === "1080") targetW = 1920;
           else if (mode === "4k") targetW = 3840;
           else if (mode === "8k") targetW = 7680;
-          const c = mode === "preview" ? $("outcanvas") : renderHighResCanvas(res, opts, targetW);
+          const c =
+            mode === "preview"
+              ? $("outcanvas")
+              : renderHighResCanvas(res, opts, targetW);
           const a = document.createElement("a");
           a.href = c.toDataURL("image/png");
           a.download = "ascii.png";
@@ -1170,14 +1241,14 @@
       }
 
       $("coloransi").addEventListener("change", convert);
-      $("transparent").addEventListener("change", convert);
       $("invert").addEventListener("change", convert);
       $("fg").addEventListener("input", convert);
       $("bg").addEventListener("input", convert);
       $("ramp").addEventListener("input", convert);
+      $("transparent").addEventListener("change", convert);
 
       convert();
     </script>
   </body>
 </html>
-EOF echo written
+EOF echo "written"
