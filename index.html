@@ -1,0 +1,1183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ASCII Tool — Local</title>
+    <style>
+      :root {
+        --bg: #f5f5f0;
+        --fg: #181818;
+        --card: #ffffff;
+        --border: #e5e5e5;
+        --muted: #6b6b6b;
+        --muted2: #a1a1a1;
+        --accent: #171717;
+        --accent-fg: #f5f5f0;
+        --input: #e5e5e5;
+        --ring: #a1a1a1;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #181818;
+          --fg: #f5f5f0;
+          --card: #171717;
+          --border: #ffffff1a;
+          --muted: #a1a1a1;
+          --muted2: #6b6b6b;
+          --accent: #e5e5e5;
+          --accent-fg: #171717;
+          --input: #ffffff26;
+          --ring: #737373;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 24px;
+      }
+      .logo {
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: -0.01em;
+      }
+      .navlinks {
+        display: flex;
+        gap: 18px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .navlinks a:hover {
+        color: var(--fg);
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0 0 6px;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 0 0 18px;
+        max-width: 640px;
+      }
+      .tabs {
+        display: flex;
+        gap: 0;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        width: fit-content;
+        margin: 0 0 20px;
+        overflow: hidden;
+      }
+      .tab {
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--muted);
+        cursor: pointer;
+        background: var(--card);
+        border-right: 1px solid var(--border);
+        transition: background 0.1s;
+      }
+      .tab:last-child {
+        border-right: none;
+      }
+      .tab:hover {
+        color: var(--fg);
+      }
+      .tab.active {
+        background: var(--accent);
+        color: var(--accent-fg);
+        font-weight: 500;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 860px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0;
+        padding: 16px;
+      }
+      .panel h2 {
+        font-size: 11px;
+        margin: 0 0 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+      }
+      .row {
+        margin-bottom: 14px;
+      }
+      .row label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin-bottom: 6px;
+        color: var(--muted);
+      }
+      .row label span.val {
+        color: var(--fg);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        height: 2px;
+      }
+      input[type="text"],
+      select,
+      textarea {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--fg);
+        border-radius: 0;
+        padding: 8px 10px;
+        font-size: 13px;
+        outline: none;
+      }
+      input[type="text"]:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--fg);
+      }
+      textarea {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        min-height: 64px;
+        resize: vertical;
+        line-height: 1.4;
+      }
+      .btn {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border: 1px solid var(--accent);
+        border-radius: 0;
+        padding: 8px 14px;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .btn:hover {
+        opacity: 0.85;
+      }
+      .btn.secondary {
+        background: var(--card);
+        color: var(--fg);
+        border: 1px solid var(--border);
+      }
+      .btn.secondary:hover {
+        border-color: var(--fg);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--fg);
+        border: 1px solid var(--border);
+      }
+      .btn.rowbtn {
+        display: inline-block;
+        margin-right: 6px;
+        margin-top: 8px;
+      }
+      .drop {
+        border: 1px dashed var(--border);
+        border-radius: 0;
+        padding: 28px 16px;
+        text-align: center;
+        color: var(--muted);
+        cursor: pointer;
+        background: var(--bg);
+      }
+      .drop:hover {
+        border-color: var(--fg);
+        color: var(--fg);
+      }
+      .drop .big {
+        font-size: 13px;
+        color: var(--fg);
+        margin-bottom: 2px;
+        font-weight: 500;
+      }
+      .drop .small {
+        font-size: 12px;
+      }
+      .srcbox {
+        margin-top: 12px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        overflow: hidden;
+      }
+      .srcbox img,
+      .srcbox video {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .srcinfo {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .preview {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 0;
+        padding: 14px;
+        min-height: 420px;
+        overflow: auto;
+      }
+      .out {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-size: 11px;
+        line-height: 1;
+        white-space: pre;
+        letter-spacing: 0;
+        color: var(--fg);
+      }
+      .controls2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .section {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .toggle input {
+        accent-color: var(--accent);
+        width: 14px;
+        height: 14px;
+      }
+      .colorpair {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .colorpair input[type="color"] {
+        width: 36px;
+        height: 26px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        border-radius: 0;
+        cursor: pointer;
+        padding: 2px;
+      }
+      .colorpair label {
+        font-size: 12px;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 2px;
+      }
+      .vidcontrols {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .vidcontrols .small {
+        margin: 0 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .status .dot {
+        width: 6px;
+        height: 6px;
+        background: var(--fg);
+      }
+      footer {
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer a:hover {
+        color: var(--fg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav>
+        <div class="logo">
+          ASCII Tool
+          <span style="color: var(--muted); font-weight: 400">— local</span>
+        </div>
+        <div class="navlinks">
+          <a href="#tool">Tool</a>
+          <a href="#how">How it works</a>
+          <a href="https://asciitool.com" target="_blank" rel="noopener"
+            >Original</a
+          >
+        </div>
+      </nav>
+
+      <h1 id="tool">Image to ASCII Converter</h1>
+      <p class="sub">
+        Upload an image, fine-tune the ASCII settings, then copy or download the
+        result. The conversion runs in your browser, so your source image stays
+        on your device.
+      </p>
+
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-mode="image">Image to ASCII</div>
+        <div class="tab" data-mode="ansi">Image to ANSI</div>
+        <div class="tab" data-mode="video">Video to ASCII</div>
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Source</h2>
+          <div id="drop" class="drop">
+            <div class="big">Drop or click to select media</div>
+            <div class="small">PNG, JPG, WebP, GIF, MP4 and more</div>
+          </div>
+          <input id="file" type="file" accept="image/*,video/*" hidden />
+          <div id="srcwrap" class="srcbox" style="display: none">
+            <img id="srcimg" style="display: none" />
+            <video id="srcvid" controls style="display: none"></video>
+          </div>
+          <div id="srcinfo" class="srcinfo"></div>
+
+          <h2 style="margin-top: 16px">Configuration</h2>
+          <div class="row">
+            <label>Width (chars) <span class="val" id="wv">100</span></label>
+            <input id="width" type="range" min="20" max="768" value="100" />
+          </div>
+          <div class="row">
+            <label>Aspect ratio <span class="val" id="arv">0.50</span></label>
+            <input
+              id="aspect"
+              type="range"
+              min="0.3"
+              max="0.8"
+              step="0.01"
+              value="0.5"
+            />
+          </div>
+          <div class="controls2">
+            <div class="row">
+              <label>Brightness <span class="val" id="brv">0</span></label>
+              <input id="bright" type="range" min="-100" max="100" value="0" />
+            </div>
+            <div class="row">
+              <label>Contrast <span class="val" id="ctv">0</span></label>
+              <input
+                id="contrast"
+                type="range"
+                min="-100"
+                max="100"
+                value="0"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <label>Edges threshold <span class="val" id="edv">0</span></label>
+            <input id="edges" type="range" min="0" max="255" value="0" />
+          </div>
+          <div class="row">
+            <label>Export scale <span class="val" id="scv">1</span>x</label>
+            <input id="scale" type="range" min="1" max="8" step="1" value="1" />
+          </div>
+          <div class="row">
+            <label>PNG resolution</label>
+            <select id="res">
+              <option value="preview">Preview</option>
+              <option value="1080">1080p</option>
+              <option value="4k">4K</option>
+              <option value="8k" selected>8K</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>Gradient ramp</label>
+            <select id="rampsel">
+              <option value="classic">Classic</option>
+              <option value="blocks">Blocks</option>
+              <option value="dots">Dots</option>
+              <option value="minimal">Minimal</option>
+              <option value="detailed">Detailed</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="row">
+            <textarea id="ramp" placeholder="gradient chars (dark to light)">
+ .:-=+*#%@</textarea>
+          </div>
+          <div class="row">
+            <label>Colors</label>
+            <div class="colorpair">
+              <label class="toggle"
+                ><input type="checkbox" id="invert" /> Invert</label
+              >
+              <div>
+                <label for="fg">Text</label><br /><input
+                  type="color"
+                  id="fg"
+                  value="#ffffff"
+                />
+              </div>
+              <div>
+                <label for="bg">Background</label><br /><input
+                  type="color"
+                  id="bg"
+                  value="#000000"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="toggle"
+              ><input type="checkbox" id="coloransi" /> Use source colors
+              (ANSI)</label
+            >
+          </div>
+          <div class="row">
+            <label class="toggle"
+              ><input type="checkbox" id="transparent" /> Transparent background (no
+              bg)</label
+            >
+          </div>
+          <div class="row" style="display: flex; gap: 6px; flex-wrap: wrap">
+            <button class="btn" id="convert">Convert</button>
+            <button class="btn secondary" id="reset">Reset settings</button>
+          </div>
+          <div class="section">
+            <button class="btn secondary rowbtn" id="copy">Copy .txt</button>
+            <button class="btn secondary rowbtn" id="downloadtxt">
+              Download .txt
+            </button>
+            <button class="btn secondary rowbtn" id="downloadpng">
+              Download PNG
+            </button>
+          </div>
+          <div id="status" class="status">
+            <span class="dot"></span><span id="statustext">Ready.</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>ASCII Output</h2>
+          <div id="outwrap" class="preview">
+            <pre id="out" class="out">Select an image or video to begin.</pre>
+          </div>
+          <canvas id="outcanvas" style="display: none"></canvas>
+          <div id="vidcontrols" class="vidcontrols" style="display: none">
+            <button class="btn ghost rowbtn" id="prevframe">Prev</button>
+            <span class="small" id="frameinfo"></span>
+            <button class="btn ghost rowbtn" id="nextframe">Next</button>
+            <button class="btn ghost rowbtn" id="play">Play / Pause</button>
+            <button class="btn ghost rowbtn" id="exportframes">
+              Export all frames
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="how"
+        style="
+          margin-top: 32px;
+          border-top: 1px solid var(--border);
+          padding-top: 24px;
+        "
+      >
+        <h2
+          style="
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 0 0 16px;
+          "
+        >
+          How it works
+        </h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+          "
+        >
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              01 — Choose source media
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              Start with a browser-readable image, video, or animated GIF.
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              02 — Local conversion
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              Your source file is processed in your browser, not uploaded.
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              03 — Fine tune output
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              Adjust width, aspect ratio, contrast, colors, and character ramps.
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              04 — Preview result
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              Compare image output, inspect ANSI color, or preview video frames.
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              05 — Copy or download
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              Copy text output or export image, animation, and frame data
+              formats.
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px">
+              Private by design
+            </div>
+            <div style="font-size: 13px; color: var(--muted)">
+              No sign up. No upload. No tracking.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div>
+          ASCII Tool (Local) —
+          <a href="https://asciitool.com" target="_blank" rel="noopener"
+            >original site</a
+          >
+        </div>
+        <div>2026</div>
+      </footer>
+    </div>
+
+    <script>
+      const RAMPS = {
+        classic: " .:-=+*#%@",
+        blocks: " ░▒▓█",
+        dots: " .oO0@",
+        minimal: " .-+#",
+        detailed:
+          " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+      };
+      const $ = (id) => document.getElementById(id);
+      let mode = "image";
+      let srcType = null;
+      let img = null;
+      let video = null;
+      let videoFrames = [];
+      let currentFrame = 0;
+      let playing = false;
+      let playTimer = null;
+
+      document.querySelectorAll(".tab").forEach((t) => {
+        t.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((x) => x.classList.remove("active"));
+          t.classList.add("active");
+          mode = t.dataset.mode;
+          if (mode === "ansi") $("coloransi").checked = true;
+          if (mode === "image") $("coloransi").checked = false;
+          convert();
+        });
+      });
+
+      const drop = $("drop");
+      const fileInput = $("file");
+      drop.addEventListener("click", () => fileInput.click());
+      drop.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        drop.classList.add("drag");
+      });
+      drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+      drop.addEventListener("drop", (e) => {
+        e.preventDefault();
+        drop.classList.remove("drag");
+        handleFile(e.dataTransfer.files[0]);
+      });
+      fileInput.addEventListener("change", (e) =>
+        handleFile(e.target.files[0]),
+      );
+
+      function handleFile(f) {
+        if (!f) return;
+        if (f.type.startsWith("image/")) {
+          srcType = "image";
+          const url = URL.createObjectURL(f);
+          const i = new Image();
+          i.onload = () => {
+            img = i;
+            video = null;
+            videoFrames = [];
+            showSrc(url, "img");
+            $("srcinfo").textContent =
+              f.name + "  ·  " + i.width + "×" + i.height;
+            $("vidcontrols").style.display = "none";
+            convert();
+          };
+          i.src = url;
+        } else if (f.type.startsWith("video/")) {
+          srcType = "video";
+          const url = URL.createObjectURL(f);
+          const v = $("srcvid");
+          v.src = url;
+          showSrc(url, "vid");
+          v.onloadedmetadata = () => {
+            video = v;
+            img = null;
+            $("srcinfo").textContent =
+              f.name +
+              "  ·  " +
+              v.videoWidth +
+              "×" +
+              v.videoHeight +
+              "  ·  " +
+              v.duration.toFixed(1) +
+              "s";
+            prepareVideoFrames();
+          };
+        } else {
+          setStatus("Unsupported file type.");
+        }
+      }
+      function showSrc(url, kind) {
+        const wrap = $("srcwrap");
+        wrap.style.display = "block";
+        if (kind === "img") {
+          $("srcimg").src = url;
+          $("srcimg").style.display = "block";
+          $("srcvid").style.display = "none";
+        } else {
+          $("srcvid").src = url;
+          $("srcvid").style.display = "block";
+          $("srcimg").style.display = "none";
+        }
+      }
+
+      function prepareVideoFrames() {
+        if (!video) return;
+        videoFrames = [];
+        currentFrame = 0;
+        const dur = video.duration;
+        const fps = 12;
+        const total = Math.min(Math.floor(dur * fps), 120);
+        $("vidcontrols").style.display = "flex";
+        setStatus("Extracting " + total + " frames…");
+        let idx = 0;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        video.onseeked = () => {
+          ctx.drawImage(video, 0, 0);
+          videoFrames.push(canvas.toDataURL("image/png"));
+          idx++;
+          if (idx < total) {
+            video.currentTime = Math.min(idx / fps, dur - 0.01);
+          } else {
+            setStatus("Ready: " + videoFrames.length + " frames");
+            updateFrameInfo();
+            convert();
+          }
+        };
+        video.currentTime = 0;
+      }
+      function updateFrameInfo() {
+        $("frameinfo").textContent =
+          "Frame " + (currentFrame + 1) + " / " + videoFrames.length;
+      }
+
+      $("prevframe").addEventListener("click", () => {
+        if (videoFrames.length) {
+          currentFrame =
+            (currentFrame - 1 + videoFrames.length) % videoFrames.length;
+          updateFrameInfo();
+          convert();
+        }
+      });
+      $("nextframe").addEventListener("click", () => {
+        if (videoFrames.length) {
+          currentFrame = (currentFrame + 1) % videoFrames.length;
+          updateFrameInfo();
+          convert();
+        }
+      });
+      $("play").addEventListener("click", () => {
+        if (playing) {
+          playing = false;
+          clearInterval(playTimer);
+          return;
+        }
+        playing = true;
+        playTimer = setInterval(() => {
+          if (!videoFrames.length) return;
+          currentFrame = (currentFrame + 1) % videoFrames.length;
+          updateFrameInfo();
+          convert();
+        }, 100);
+      });
+      $("exportframes").addEventListener("click", async () => {
+        if (!videoFrames.length) return;
+        setStatus("Exporting frames…");
+        let out = "";
+        for (let i = 0; i < videoFrames.length; i++) {
+          const txt = await frameToText(videoFrames[i]);
+          out += "===== FRAME " + (i + 1) + " =====\n" + txt + "\n";
+        }
+        downloadText(out, "frames.txt");
+        setStatus("Exported " + videoFrames.length + " frames.");
+      });
+
+      $("rampsel").addEventListener("change", (e) => {
+        const v = e.target.value;
+        if (v !== "custom" && RAMPS[v]) $("ramp").value = RAMPS[v];
+        convert();
+      });
+      $("ramp").value = RAMPS.classic;
+
+      ["width", "aspect", "bright", "contrast", "edges", "scale"].forEach((id) => {
+        $(id).addEventListener("input", () => {
+          updateLabels();
+          convert();
+        });
+      });
+      function updateLabels() {
+        $("wv").textContent = $("width").value;
+        $("arv").textContent = parseFloat($("aspect").value).toFixed(2);
+        $("brv").textContent = $("bright").value;
+        $("ctv").textContent = $("contrast").value;
+        $("edv").textContent = $("edges").value;
+        $("scv").textContent = $("scale").value;
+      }
+      updateLabels();
+
+      function adjust(v, b, c) {
+        let x = v + (b / 100) * 255;
+        x = (x - 128) * (1 + c / 100) + 128;
+        return Math.max(0, Math.min(255, x));
+      }
+
+      function getRamp() {
+        return $("ramp").value || " .:-=+*#%@";
+      }
+
+      function imageDataFromImg(image) {
+        const c = document.createElement("canvas");
+        c.width = image.width;
+        c.height = image.height;
+        const ctx = c.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+        return ctx.getImageData(0, 0, c.width, c.height);
+      }
+
+      function convertImageToAscii(imageData, opts) {
+        const {
+          width: cols,
+          aspect,
+          bright,
+          contrast,
+          edges,
+          ramp,
+          invert,
+          color,
+        } = opts;
+        const rows = Math.max(
+          1,
+          Math.round(cols * (imageData.height / imageData.width) * aspect),
+        );
+        const c = document.createElement("canvas");
+        c.width = cols;
+        c.height = rows;
+        const ctx = c.getContext("2d");
+        const srcCanvas = document.createElement("canvas");
+        srcCanvas.width = imageData.width;
+        srcCanvas.height = imageData.height;
+        srcCanvas.getContext("2d").putImageData(imageData, 0, 0);
+        ctx.imageSmoothingEnabled = true;
+        ctx.drawImage(srcCanvas, 0, 0, cols, rows);
+        const d = ctx.getImageData(0, 0, cols, rows).data;
+
+        let edgeMap = null;
+        if (edges > 0) {
+          const gray = new Float32Array(cols * rows);
+          for (let i = 0; i < cols * rows; i++) {
+            gray[i] =
+              0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+          }
+          edgeMap = new Float32Array(cols * rows);
+          for (let y = 1; y < rows - 1; y++) {
+            for (let x = 1; x < cols - 1; x++) {
+              const idx = y * cols + x;
+              const gx =
+                -gray[(y - 1) * cols + (x - 1)] +
+                gray[(y - 1) * cols + (x + 1)] -
+                2 * gray[y * cols + (x - 1)] +
+                2 * gray[y * cols + (x + 1)] -
+                gray[(y + 1) * cols + (x - 1)] +
+                gray[(y + 1) * cols + (x + 1)];
+              const gy =
+                -gray[(y - 1) * cols + (x - 1)] -
+                2 * gray[(y - 1) * cols + x] -
+                gray[(y - 1) * cols + (x + 1)] +
+                gray[(y + 1) * cols + (x - 1)] +
+                2 * gray[(y + 1) * cols + x] +
+                gray[(y + 1) * cols + (x + 1)];
+              edgeMap[idx] = Math.sqrt(gx * gx + gy * gy);
+            }
+          }
+        }
+
+        const chars = ramp;
+        const n = chars.length;
+        let lines = [];
+        let ansiLines = [];
+        for (let y = 0; y < rows; y++) {
+          let line = "";
+          let ansiLine = "";
+          for (let x = 0; x < cols; x++) {
+            const i = (y * cols + x) * 4;
+            let r = d[i],
+              g = d[i + 1],
+              b = d[i + 2];
+            r = adjust(r, bright, contrast);
+            g = adjust(g, bright, contrast);
+            b = adjust(b, bright, contrast);
+            let lum = 0.299 * r + 0.587 * g + 0.114 * b;
+            if (edgeMap && edgeMap[y * cols + x] > edges) {
+              lum = Math.min(255, lum + edgeMap[y * cols + x] * 0.5);
+            }
+            if (invert) lum = 255 - lum;
+            let ci = Math.floor((lum / 255) * (n - 1));
+            if (ci < 0) ci = 0;
+            if (ci > n - 1) ci = n - 1;
+            const ch = chars[ci];
+            line += ch;
+            if (color) {
+              ansiLine += `\x1b[38;2;${Math.round(r)};${Math.round(g)};${Math.round(b)}m${ch}\x1b[0m`;
+            }
+          }
+          lines.push(line);
+          ansiLines.push(color ? ansiLine : line);
+        }
+        return {
+          text: lines.join("\n"),
+          ansi: ansiLines.join("\n"),
+          cols,
+          rows,
+        };
+      }
+
+      async function frameToText(url) {
+        return new Promise((resolve) => {
+          const i = new Image();
+          i.onload = () => {
+            const id = imageDataFromImg(i);
+            const res = convertImageToAscii(id, getOpts());
+            resolve(res.text);
+          };
+          i.src = url;
+        });
+      }
+
+      function getOpts() {
+        return {
+          width: parseInt($("width").value),
+          aspect: parseFloat($("aspect").value),
+          bright: parseInt($("bright").value),
+          contrast: parseInt($("contrast").value),
+          edges: parseInt($("edges").value),
+          ramp: getRamp(),
+          invert: $("invert").checked,
+          color: $("coloransi").checked || mode === "ansi",
+        };
+      }
+
+      function convert() {
+        updateLabels();
+        const out = $("out");
+        if (srcType === "image" && img) {
+          const id = imageDataFromImg(img);
+          const res = convertImageToAscii(id, getOpts());
+          renderResult(res);
+        } else if (srcType === "video" && videoFrames.length) {
+          const i = new Image();
+          i.onload = () => {
+            const id = imageDataFromImg(i);
+            const res = convertImageToAscii(id, getOpts());
+            renderResult(res);
+          };
+          i.src = videoFrames[currentFrame];
+        } else {
+          out.textContent = "Select an image or video to begin.";
+          out.style.color = "var(--muted)";
+        }
+      }
+
+      function renderResult(res) {
+        window.__lastResult = res;
+        const out = $("out");
+        const opts = getOpts();
+        if (opts.color) {
+          out.innerHTML = ansiToHtml(res.ansi);
+        } else {
+          out.textContent = res.text;
+          out.style.color = $("fg").value;
+        }
+        out.style.background = $("transparent").checked ? "transparent" : $("bg").value;
+        renderToCanvas(res, opts);
+        $("statustext").textContent =
+          "Output: " + res.cols + " × " + res.rows + " chars";
+      }
+
+      function ansiToHtml(ansi) {
+        const lines = ansi.split("\n");
+        return lines
+          .map((line) => {
+            let html = "";
+            const parts = line.split("\x1b[0m");
+            parts.forEach((p) => {
+              const m2 = p.match(/\x1b\[38;2;(\d+);(\d+);(\d+)m([\s\S]*)/);
+              if (m2) {
+                html += `<span style="color:rgb(${m2[1]},${m2[2]},${m2[3]})">${escapeHtml(m2[4])}</span>`;
+              } else {
+                html += escapeHtml(p.replace(/\x1b\[[^m]*m/g, ""));
+              }
+            });
+            return html;
+          })
+          .join("<br>");
+      }
+      function escapeHtml(s) {
+        return s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function renderToCanvas(res, opts) {
+        const canvas = $("outcanvas");
+        const ctx = canvas.getContext("2d");
+        const scale = parseInt($("scale").value) || 1;
+        const fontSize = 10 * scale;
+        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
+        const lines = res.text.split("\n");
+        const charW = ctx.measureText("M").width || 6;
+        const lineH = fontSize * 1.05;
+        canvas.width = Math.ceil(charW * res.cols) + 8;
+        canvas.height = Math.ceil(lineH * res.rows) + 8;
+        if ($("transparent").checked) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = $("bg").value;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
+        ctx.textBaseline = "top";
+        if (opts.color) {
+          const ansiLines = res.ansi.split("\n");
+          ansiLines.forEach((line, y) => {
+            const re = /\x1b\[38;2;(\d+);(\d+);(\d+)m(.)\x1b\[0m/g;
+            let match,
+              cx = 4;
+            while ((match = re.exec(line)) !== null) {
+              ctx.fillStyle = `rgb(${match[1]},${match[2]},${match[3]})`;
+              ctx.fillText(match[4], cx, y * lineH + 4);
+              cx += charW;
+            }
+          });
+        } else {
+          ctx.fillStyle = $("fg").value;
+          lines.forEach((line, y) => {
+            ctx.fillText(line, 4, y * lineH + 4);
+          });
+        }
+      }
+
+      $("convert").addEventListener("click", convert);
+      $("reset").addEventListener("click", () => {
+        $("width").value = 100;
+        $("aspect").value = 0.5;
+        $("bright").value = 0;
+        $("contrast").value = 0;
+        $("edges").value = 0;
+        $("invert").checked = false;
+        $("fg").value = "#ffffff";
+        $("bg").value = "#000000";
+        $("rampsel").value = "classic";
+        $("ramp").value = RAMPS.classic;
+        $("coloransi").checked = mode === "ansi";
+        updateLabels();
+        convert();
+      });
+      $("copy").addEventListener("click", () => {
+        const out = $("out").textContent || $("out").innerText;
+        navigator.clipboard.writeText(out).then(() => {
+          $("statustext").textContent = "Copied to clipboard.";
+        });
+      });
+      $("downloadtxt").addEventListener("click", () => {
+        const out = $("out").textContent || $("out").innerText;
+        downloadText(out, "ascii.txt");
+      });
+      function renderHighResCanvas(res, opts, targetW) {
+        const cols = res.cols, rows = res.rows;
+        const charW = targetW / cols;
+        const fontSize = charW / 0.6;
+        const lineH = fontSize * 1.05;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = Math.ceil(charW * cols) + 8;
+        canvas.height = Math.ceil(lineH * rows) + 8;
+        if ($("transparent").checked) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = $("bg").value;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
+        ctx.textBaseline = "top";
+        if (opts.color) {
+          const ansiLines = res.ansi.split("\n");
+          ansiLines.forEach((line, y) => {
+            const re = /\x1b\[38;2;(\d+);(\d+);(\d+)m(.)\x1b\[0m/g;
+            let match, cx = 4;
+            while ((match = re.exec(line)) !== null) {
+              ctx.fillStyle = `rgb(${match[1]},${match[2]},${match[3]})`;
+              ctx.fillText(match[4], cx, y * lineH + 4);
+              cx += charW;
+            }
+          });
+        } else {
+          ctx.fillStyle = $("fg").value;
+          res.text.split("\n").forEach((line, y) => {
+            ctx.fillText(line, 4, y * lineH + 4);
+          });
+        }
+        return canvas;
+      }
+      $("downloadpng").addEventListener("click", () => {
+        setStatus("Rendering PNG…");
+        setTimeout(() => {
+          const res = window.__lastResult;
+          if (!res) { setStatus("Nothing to export."); return; }
+          const opts = getOpts();
+          const mode = $("res").value;
+          let targetW = $("outcanvas").width;
+          if (mode === "1080") targetW = 1920;
+          else if (mode === "4k") targetW = 3840;
+          else if (mode === "8k") targetW = 7680;
+          const c = mode === "preview" ? $("outcanvas") : renderHighResCanvas(res, opts, targetW);
+          const a = document.createElement("a");
+          a.href = c.toDataURL("image/png");
+          a.download = "ascii.png";
+          a.click();
+          setStatus("PNG exported (" + c.width + "×" + c.height + ").");
+        }, 50);
+      });
+      function downloadText(text, name) {
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      function setStatus(t) {
+        $("statustext").textContent = t;
+      }
+
+      $("coloransi").addEventListener("change", convert);
+      $("transparent").addEventListener("change", convert);
+      $("invert").addEventListener("change", convert);
+      $("fg").addEventListener("input", convert);
+      $("bg").addEventListener("input", convert);
+      $("ramp").addEventListener("input", convert);
+
+      convert();
+    </script>
+  </body>
+</html>
+EOF echo written

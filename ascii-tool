@@ -1,0 +1,21 @@
+#!/bin/sh
+# ASCII Tool launcher for Arch Linux
+# Opens the local tool in the default browser.
+
+APP_DIR="/usr/share/ascii-tool"
+INDEX="$APP_DIR/index.html"
+
+if [ ! -f "$INDEX" ]; then
+  # Fallback: look relative to script
+  INDEX="$(dirname "$0")/index.html"
+fi
+
+if command -v xdg-open >/dev/null 2>&1; then
+  xdg-open "$INDEX" >/dev/null 2>&1 &
+elif command -v firefox >/dev/null 2>&1; then
+  firefox "$INDEX" >/dev/null 2>&1 &
+elif command -v chromium >/dev/null 2>&1; then
+  chromium "$INDEX" >/dev/null 2>&1 &
+else
+  echo "No browser found. Open manually: $INDEX"
+fi

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ASCII Tool
+Comment=Browser-based image, ANSI, and video to ASCII converter (local)
+Exec=ascii-tool
+Icon=ascii-tool
+Type=Application
+Categories=Graphics;Photography;Utility;
+Terminal=false
+StartupNotify=true
